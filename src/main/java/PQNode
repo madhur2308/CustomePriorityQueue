@@ -1,0 +1,21 @@
+public class PQNode<T> {
+    private AtomicInteger key;
+    private List<T> values;
+    private AtomicInteger throttleRate;
+
+    public void PQNode(int key, T value, int throttleRate) {
+        this.values = Collections.synchronizedList(new ArrayList<T>());
+        this.values.add(value);
+        this.key = new AtomicInteger(key);
+        this.isThrottled = new AtomicBoolean(false);
+        this.throttleRate = new AtomicInteger(throttleRate);
+    }
+
+    public synchronized T getValue() {
+        T removedValue = this.values.remove(0);
+        if (this.values.length == 0) {
+            this.values = null;
+        }
+    }
+
+}
